@@ -1,9 +1,7 @@
 package com.devmasterteam.tasks.service.repository.remote
 
 import com.devmasterteam.tasks.service.constants.TaskConstants
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -44,9 +42,6 @@ class RetrofitClient private constructor() {
         fun addHeaders(tokenValue: String, personKeyValue: String){
             token = tokenValue
             personKey = personKeyValue
-
-
         }
-
     }
 }
