@@ -29,6 +29,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         binding.buttonLogin.setOnClickListener(this)
         binding.textRegister.setOnClickListener(this)
 
+        viewModel.verifyLoggedUser()
+
         // Observadores
         observe()
     }
@@ -48,6 +50,15 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 Toast.makeText(this, it.message(), Toast.LENGTH_SHORT).show()
             }
         }
+
+        viewModel.loggedUser.observe(this) {
+            if (it) {
+                startActivity(Intent(applicationContext, MainActivity::class.java))
+                finish()
+            } else
+                Toast.makeText(this, "Preencha os campos corretamente!", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     private fun handleLogin() {
