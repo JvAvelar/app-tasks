@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 class PersonModel {
 
-    @SerializedName("name")
+    @SerializedName("token")
     lateinit var token: String
 
     @SerializedName("personKey")
