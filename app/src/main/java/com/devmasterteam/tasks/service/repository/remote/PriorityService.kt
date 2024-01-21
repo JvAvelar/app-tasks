@@ -9,5 +9,4 @@ interface PriorityService {
     @GET("Priority")
     fun list() : Call<List<PriorityModel>>
 
-
 }
