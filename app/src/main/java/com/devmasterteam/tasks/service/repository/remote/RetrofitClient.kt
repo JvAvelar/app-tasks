@@ -8,13 +8,12 @@ class RetrofitClient private constructor() {
     companion object {
 
         private lateinit var INSTANCE: Retrofit
-        private const val BASE_URL = "http://devmasterteam.com/CursoAndroidAPI/"
         private fun getRetrofitInstance(): Retrofit {
             val httpCliente = OkHttpClient.Builder()
             if (!::INSTANCE.isInitialized) {
                 synchronized(RetrofitClient::class) {
                     INSTANCE = Retrofit.Builder()
-                        .baseUrl(BASE_URL)
+                        .baseUrl("http://devmasterteam.com/CursoAndroidAPI/")
                         .client(httpCliente.build())
                         .addConverterFactory(GsonConverterFactory.create())
                         .build()
@@ -23,7 +22,8 @@ class RetrofitClient private constructor() {
             return INSTANCE
         }
 
+        fun <T> getService(serviceClass: Class<T>) : T {
+            return getRetrofitInstance().create(serviceClass)
+        }
     }
-
-
 }
