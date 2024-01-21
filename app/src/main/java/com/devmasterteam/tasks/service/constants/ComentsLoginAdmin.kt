@@ -10,7 +10,8 @@ class ComentsLoginAdmin private constructor() {
 }
 
 name "Joao "
-email "jvitoraveelar1200@gmail.com"
-password "170903"
+jvitoravelar1200@gmail.com
+vitor.avelar@gmail.com
+password 170903
      */
 }
