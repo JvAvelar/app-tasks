@@ -12,7 +12,6 @@ import com.devmasterteam.tasks.service.model.ValidationModel
 import com.devmasterteam.tasks.service.repository.PersonRepository
 import com.devmasterteam.tasks.service.repository.PriorityRepository
 import com.devmasterteam.tasks.service.repository.SecurityPreferences
-import com.devmasterteam.tasks.service.repository.local.PriorityDAO
 import com.devmasterteam.tasks.service.repository.remote.RetrofitClient
 
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
@@ -55,14 +54,16 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     fun verifyLoggedUser() {
         val token = securityPreferences.get(TaskConstants.SHARED.TOKEN_KEY)
         val person = securityPreferences.get(TaskConstants.SHARED.PERSON_KEY)
+
         RetrofitClient.addHeaders(token, person)
+
         val logged = (token != "" && person != "")
         _loggedUser.value = logged
 
         if (!logged) {
             priorityRepository.list(object : APIListener<List<PriorityModel>> {
                 override fun onSuccess(result: List<PriorityModel>) {
-                    val s = ""
+                    priorityRepository.save(result)
                 }
 
                 override fun onFailure(message: String) {
