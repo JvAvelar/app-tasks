@@ -10,6 +10,10 @@ interface PriorityDAO {
 
     @Insert
     fun save(list: List<PriorityModel>)
+
     @Query("SELECt * FROM Priority")
     fun list() : List<PriorityModel>
+
+    @Query("DELETE FROM Priority")
+    fun clear()
 }
