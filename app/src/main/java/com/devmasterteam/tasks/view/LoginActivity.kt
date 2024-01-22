@@ -55,10 +55,8 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             if (it) {
                 startActivity(Intent(applicationContext, MainActivity::class.java))
                 finish()
-            } else
-                Toast.makeText(this, "Preencha os campos corretamente!", Toast.LENGTH_SHORT).show()
+            }
         }
-
     }
 
     private fun handleLogin() {
@@ -66,5 +64,4 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         val password = binding.editPassword.text.toString()
         viewModel.doLogin(email, password)
     }
-
 }
