@@ -13,7 +13,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PriorityRepository(val context: Context) {
+class PriorityRepository(val context: Context) : BaseRepository() {
 
     private val remote = RetrofitClient.getService(PriorityService::class.java)
     private val database = TaskDatabase.getDatabase(context).priorityDAO()
@@ -45,9 +45,5 @@ class PriorityRepository(val context: Context) {
     fun save(list: List<PriorityModel>){
         database.clear()
         database.save(list)
-    }
-
-    private fun failResponse(str: String): String {
-        return Gson().fromJson(str, String::class.java)
     }
 }
