@@ -12,7 +12,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PersonRepository(val context: Context) {
+class PersonRepository(val context: Context) : BaseRepository() {
 
     private val remote = RetrofitClient.getService(PersonService::class.java)
 
@@ -31,9 +31,4 @@ class PersonRepository(val context: Context) {
             }
         })
     }
-
-    private fun failResponse(str: String): String {
-        return Gson().fromJson(str, String::class.java)
-    }
-
 }
