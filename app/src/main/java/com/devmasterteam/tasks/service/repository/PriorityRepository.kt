@@ -21,28 +21,22 @@ class PriorityRepository(val context: Context) : BaseRepository() {
         val call = remote.list()
         call.enqueue(object : Callback<List<PriorityModel>> {
             override fun onResponse(
-                call: Call<List<PriorityModel>>,
-                response: Response<List<PriorityModel>>
+                call: Call<List<PriorityModel>>, response: Response<List<PriorityModel>>
             ) {
-                if (response.code() == TaskConstants.HTTP.SUCCESS)
-                    response.body()?.let { listener.onSuccess(it) }
-                else
-                    listener.onFailure(failResponse(response.errorBody()!!.string()))
+                handleResponse(response, listener)
             }
 
             override fun onFailure(call: Call<List<PriorityModel>>, t: Throwable) {
-                listener.onFailure(context.getString(R.string.ERROR_UNEXPECTED))
-
+                failureError(listener, context)
             }
         })
-
     }
 
-    fun list() : List<PriorityModel> {
+    fun list(): List<PriorityModel> {
         return database.list()
     }
 
-    fun save(list: List<PriorityModel>){
+    fun save(list: List<PriorityModel>) {
         database.clear()
         database.save(list)
     }
