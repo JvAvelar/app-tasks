@@ -20,14 +20,11 @@ class PersonRepository(val context: Context) : BaseRepository() {
         val call = remote.login(email, password)
         call.enqueue(object : Callback<PersonModel> {
             override fun onResponse(call: Call<PersonModel>, response: Response<PersonModel>) {
-                if (response.code() == TaskConstants.HTTP.SUCCESS)
-                    response.body()?.let { listener.onSuccess(it) }
-                else
-                    listener.onFailure(failResponse(response.errorBody()!!.string()))
+                handleResponse(response, listener)
             }
 
             override fun onFailure(call: Call<PersonModel>, t: Throwable) {
-                listener.onFailure(context.getString(R.string.ERROR_UNEXPECTED))
+                failureError(listener, context)
             }
         })
     }
