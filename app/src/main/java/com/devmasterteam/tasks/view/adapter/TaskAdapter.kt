@@ -1,5 +1,6 @@
 package com.devmasterteam.tasks.view.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -31,4 +32,9 @@ class TaskAdapter : RecyclerView.Adapter<TaskViewHolder>() {
         listener = taskListener
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateTasks(list: List<TaskModel>){
+        listTasks = list
+        notifyDataSetChanged()
+    }
 }
