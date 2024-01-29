@@ -25,18 +25,19 @@ class TaskViewHolder(private val itemBinding: RowTaskListBinding, val listener: 
         val date = SimpleDateFormat("yyyy-MM-dd").parse(task.dueDate)
         itemBinding.textDueDate.text = date?.let { SimpleDateFormat("dd-MM-yyyy").format(it) }
 
-        if (task.complete) {
+        if (task.complete)
             itemBinding.imageTask.setImageResource(R.drawable.ic_done)
-        }
+        else
+            itemBinding.imageTask.setImageResource(R.drawable.ic_todo)
+
 
         // Eventos
         itemBinding.textDescription.setOnClickListener { listener.onListClick(task.id) }
         itemBinding.imageTask.setOnClickListener {
-            if (task.complete) {
+            if (task.complete)
                 listener.onUndoClick(task.id)
-            } else {
+            else
                 listener.onCompleteClick(task.id)
-            }
         }
 
         itemBinding.textDescription.setOnLongClickListener {
