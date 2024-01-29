@@ -13,28 +13,42 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PriorityRepository(val context: Context) : BaseRepository() {
+class PriorityRepository(context: Context) : BaseRepository(context) {
 
     private val remote = RetrofitClient.getService(PriorityService::class.java)
     private val database = TaskDatabase.getDatabase(context).priorityDAO()
-    fun list(listener: APIListener<List<PriorityModel>>) {
-        val call = remote.list()
-        call.enqueue(object : Callback<List<PriorityModel>> {
-            override fun onResponse(
-                call: Call<List<PriorityModel>>, response: Response<List<PriorityModel>>
-            ) {
-                handleResponse(response, listener)
-            }
 
-            override fun onFailure(call: Call<List<PriorityModel>>, t: Throwable) {
-                failureError(listener, context)
-            }
-        })
+    fun list(listener: APIListener<List<PriorityModel>>) {
+        executeCall(remote.list(), listener)
+    }
+
+    // Cache
+    companion object {
+        private val cache = mutableMapOf<Int, String>()
+        fun getDescription(id: Int): String {
+            return cache[id] ?: ""
+        }
+
+        fun setDescription(id: Int, str: String) {
+            cache[id] = str
+        }
+    }
+
+    fun getDescription(id: Int): String {
+        val cached = PriorityRepository.getDescription(id)
+        return if (cached == "") {
+            val description = database.getDescription(id)
+            setDescription(id, description)
+            description
+        } else {
+            cached
+        }
     }
 
     fun list(): List<PriorityModel> {
         return database.list()
     }
+
 
     fun save(list: List<PriorityModel>) {
         database.clear()
