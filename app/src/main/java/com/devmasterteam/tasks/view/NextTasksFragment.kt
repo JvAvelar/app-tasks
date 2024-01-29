@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.devmasterteam.tasks.databinding.FragmentNextTasksBinding
 import com.devmasterteam.tasks.viewmodel.TaskListViewModel
@@ -21,13 +19,8 @@ class NextTasksFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(TaskListViewModel::class.java)
 
         _binding = FragmentNextTasksBinding.inflate(inflater, container, false)
-        val root: View = binding.root
 
-        val textView: TextView = binding.textGallery
-        viewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-        return root
+        return binding.root
     }
 
     override fun onDestroyView() {
