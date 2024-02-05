@@ -1,11 +1,13 @@
 package com.devmasterteam.tasks.view
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +24,7 @@ class AllTasksFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val adapter = TaskAdapter()
+    private var taskFilter = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, b: Bundle?): View {
         viewModel = ViewModelProvider(this).get(TaskListViewModel::class.java)
@@ -30,6 +33,8 @@ class AllTasksFragment : Fragment() {
         binding.recyclerAllTasks.layoutManager = LinearLayoutManager(context)
         binding.recyclerAllTasks.adapter = adapter
 
+       taskFilter = requireArguments().getInt(TaskConstants.BUNDLE.TASKFILTER, 0)
+
         val listener = object : TaskListener {
             override fun onListClick(id: Int) {
                 val intent = Intent(context, TaskFormActivity::class.java)
@@ -37,17 +42,19 @@ class AllTasksFragment : Fragment() {
                 bundle.putInt(TaskConstants.BUNDLE.TASKID, id);
                 intent.putExtras(bundle)
                 startActivity(intent)
-
             }
 
+            @RequiresApi(Build.VERSION_CODES.M)
             override fun onDeleteClick(id: Int) {
                 viewModel.delete(id)
             }
 
+            @RequiresApi(Build.VERSION_CODES.M)
             override fun onCompleteClick(id: Int) {
                 viewModel.status(id, true)
             }
 
+            @RequiresApi(Build.VERSION_CODES.M)
             override fun onUndoClick(id: Int) {
                 viewModel.status(id, false)
             }
@@ -67,9 +74,10 @@ class AllTasksFragment : Fragment() {
         _binding = null
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onResume() {
         super.onResume()
-        viewModel.list()
+        viewModel.list(taskFilter)
     }
 
     private fun observe() {
