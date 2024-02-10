@@ -1,10 +1,12 @@
 package com.devmasterteam.tasks.view
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import com.devmasterteam.tasks.R
 import com.devmasterteam.tasks.databinding.ActivityLoginBinding
@@ -35,9 +37,13 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         observe()
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onClick(v: View) {
         if (v.id == R.id.button_login) {
             handleLogin()
+        }
+        else if (v.id == R.id.text_register) {
+            startActivity(Intent(this, RegisterActivity::class.java ))
         }
     }
 
@@ -59,6 +65,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun handleLogin() {
         val email = binding.editEmail.text.toString()
         val password = binding.editPassword.text.toString()
