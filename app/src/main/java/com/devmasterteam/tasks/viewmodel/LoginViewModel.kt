@@ -1,6 +1,8 @@
 package com.devmasterteam.tasks.viewmodel
 
 import android.app.Application
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -30,6 +32,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     /**
      * Faz login usando API
      */
+    @RequiresApi(Build.VERSION_CODES.M)
     fun doLogin(email: String, password: String) {
         personRepository.login(email, password, object : APIListener<PersonModel> {
             override fun onSuccess(result: PersonModel) {
