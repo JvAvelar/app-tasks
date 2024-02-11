@@ -1,5 +1,6 @@
 package com.devmasterteam.tasks.viewmodel
 
+import android.annotation.SuppressLint
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -32,6 +33,7 @@ class TaskFormViewModel(application: Application) : AndroidViewModel(application
         _priorityList.value = priorityRepository.list()
     }
 
+    @SuppressLint("NewApi")
     fun save(task: TaskModel) {
         val listener = object : APIListener<Boolean> {
             override fun onSuccess(result: Boolean) {
@@ -49,6 +51,7 @@ class TaskFormViewModel(application: Application) : AndroidViewModel(application
             taskRepository.update(task, listener)
     }
 
+    @SuppressLint("NewApi")
     fun load(id: Int) {
         taskRepository.load(id, object : APIListener<TaskModel> {
             override fun onSuccess(result: TaskModel) {
