@@ -35,6 +35,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
         // Observadores
         observe()
+        supportActionBar?.hide()
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
