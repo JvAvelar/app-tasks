@@ -39,9 +39,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 securityPreferences.store(TaskConstants.SHARED.TOKEN_KEY, result.token)
                 securityPreferences.store(TaskConstants.SHARED.PERSON_KEY, result.personKey)
                 securityPreferences.store(TaskConstants.SHARED.PERSON_NAME, result.name)
-
                 RetrofitClient.addHeaders(result.token, result.personKey)
-
                 _login.value = ValidationModel()
             }
 
@@ -57,7 +55,6 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     fun verifyLoggedUser() {
         val token = securityPreferences.get(TaskConstants.SHARED.TOKEN_KEY)
         val person = securityPreferences.get(TaskConstants.SHARED.PERSON_KEY)
-
         RetrofitClient.addHeaders(token, person)
 
         val logged = (token != "" && person != "")
@@ -72,9 +69,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 override fun onFailure(message: String) {
                     val s = ""
                 }
-
             })
         }
     }
-
 }
