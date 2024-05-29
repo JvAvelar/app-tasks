@@ -24,7 +24,7 @@
     <string name="sim">Sim</string>
     <string name="cancelar">Cancelar</string>
     <string name="remocao_de_tarefa">Remoção de tarefa</string>
-    <string name="remover_tarefa">Remover tarefa?</string>
+    <string name="remover_tarefa">Tem certeza que deseja remover essa tarefa?</string>
     <string name="nao_tem_uma_conta">Não tem uma conta?</string>
     <string name="cadastre_se">Cadastre-se</string>
     <string name="entrar">Entrar</string>
