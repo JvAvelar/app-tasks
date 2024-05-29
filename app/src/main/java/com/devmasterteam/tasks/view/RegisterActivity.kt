@@ -22,6 +22,7 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
         viewModel = ViewModelProvider(this).get(RegisterViewModel::class.java)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
 
+        supportActionBar?.hide()
         // Eventos
         binding.buttonSave.setOnClickListener(this)
 
