@@ -34,11 +34,11 @@
         <item name="android:paddingBottom">8dp</item>
     </style>
 
-    <style name="FieldText">
+    <style name="DefaultEditText">
         <item name="android:backgroundTint">@color/white</item>
         <item name="android:textColorHint">@color/white</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:drawableTint" tools:ignore="NewApi">@color/white</item>
+        <item name="android:drawableTint">@color/white</item>
         <item name="android:drawablePadding">8dp</item>
     </style>
 
