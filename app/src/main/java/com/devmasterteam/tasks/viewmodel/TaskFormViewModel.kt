@@ -1,6 +1,5 @@
 package com.devmasterteam.tasks.viewmodel
 
-import android.annotation.SuppressLint
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -11,14 +10,16 @@ import com.devmasterteam.tasks.service.model.TaskModel
 import com.devmasterteam.tasks.service.model.ValidationModel
 import com.devmasterteam.tasks.service.repository.PriorityRepository
 import com.devmasterteam.tasks.service.repository.TaskRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class TaskFormViewModel(application: Application) : AndroidViewModel(application) {
 
     private val priorityRepository = PriorityRepository(application.applicationContext)
     private val taskRepository = TaskRepository(application.applicationContext)
 
-    private val _priorityList = MutableLiveData<List<PriorityModel>>()
-    val priorityList: LiveData<List<PriorityModel>> = _priorityList
+    private val _priorityList = MutableStateFlow<List<PriorityModel>>(emptyList())
+    val priorityList = _priorityList.asStateFlow()
 
     private val _taskSave = MutableLiveData<ValidationModel>()
     val taskSave: LiveData<ValidationModel> = _taskSave
@@ -33,7 +34,6 @@ class TaskFormViewModel(application: Application) : AndroidViewModel(application
         _priorityList.value = priorityRepository.list()
     }
 
-    @SuppressLint("NewApi")
     fun save(task: TaskModel) {
         val listener = object : APIListener<Boolean> {
             override fun onSuccess(result: Boolean) {
@@ -51,7 +51,6 @@ class TaskFormViewModel(application: Application) : AndroidViewModel(application
             taskRepository.update(task, listener)
     }
 
-    @SuppressLint("NewApi")
     fun load(id: Int) {
         taskRepository.load(id, object : APIListener<TaskModel> {
             override fun onSuccess(result: TaskModel) {
