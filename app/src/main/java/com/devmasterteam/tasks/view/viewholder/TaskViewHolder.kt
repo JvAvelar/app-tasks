@@ -7,12 +7,10 @@ import com.devmasterteam.tasks.R
 import com.devmasterteam.tasks.databinding.RowTaskListBinding
 import com.devmasterteam.tasks.service.listener.TaskListener
 import com.devmasterteam.tasks.service.model.TaskModel
-import com.devmasterteam.tasks.service.repository.PriorityRepository
 import java.text.SimpleDateFormat
 
 class TaskViewHolder(private val itemBinding: RowTaskListBinding, val listener: TaskListener) :
     RecyclerView.ViewHolder(itemBinding.root) {
-
 
     /**
      * Atribui valores aos elementos de interface e também eventos
@@ -23,13 +21,12 @@ class TaskViewHolder(private val itemBinding: RowTaskListBinding, val listener: 
         itemBinding.textDescription.text = task.description
         itemBinding.textPriority.text = task.priorityDescription
         val date = SimpleDateFormat("yyyy-MM-dd").parse(task.dueDate)
-        itemBinding.textDueDate.text = date?.let { SimpleDateFormat("dd-MM-yyyy").format(it) }
+        itemBinding.textDueDate.text = date?.let { SimpleDateFormat("dd/MM/yyyy").format(it) }
 
         if (task.complete)
             itemBinding.imageTask.setImageResource(R.drawable.ic_done)
         else
             itemBinding.imageTask.setImageResource(R.drawable.ic_todo)
-
 
         // Eventos
         itemBinding.textDescription.setOnClickListener { listener.onListClick(task.id) }
