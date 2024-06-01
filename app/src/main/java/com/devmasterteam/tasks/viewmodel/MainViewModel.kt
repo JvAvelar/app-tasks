@@ -2,17 +2,17 @@ package com.devmasterteam.tasks.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.devmasterteam.tasks.service.constants.TaskConstants
 import com.devmasterteam.tasks.service.repository.SecurityPreferences
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val securityPreferences = SecurityPreferences(application.applicationContext)
 
-    private val _name = MutableLiveData<String>()
-    val name: LiveData<String> = _name
+    private val _name = MutableStateFlow("")
+    val name = _name.asStateFlow()
 
     fun logout(){
         securityPreferences.remove(TaskConstants.SHARED.TOKEN_KEY)
@@ -23,6 +23,4 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun loadUserName() {
         _name.value = securityPreferences.get(TaskConstants.SHARED.PERSON_NAME)
     }
-
-
 }
