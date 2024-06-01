@@ -2,19 +2,23 @@ package com.devmasterteam.tasks.view
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.devmasterteam.tasks.R
 import com.devmasterteam.tasks.databinding.ActivityTaskFormBinding
 import com.devmasterteam.tasks.service.constants.TaskConstants
 import com.devmasterteam.tasks.service.model.PriorityModel
 import com.devmasterteam.tasks.service.model.TaskModel
 import com.devmasterteam.tasks.viewmodel.TaskFormViewModel
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -27,7 +31,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
     @SuppressLint("SimpleDateFormat")
     private val dateFormat = SimpleDateFormat("dd/MM/yyyy")
     private var listPriority: List<PriorityModel> = mutableListOf()
-    private var taskIdentification = 0
+    private var taskIdentification = TaskConstants.FILTER.ALL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,12 +55,10 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
     }
 
     override fun onClick(v: View) {
-        if (v.id == R.id.button_date) {
+        if (v.id == R.id.button_date)
             handleDate()
-        } else if (v.id == R.id.button_save) {
+        else if (v.id == R.id.button_save)
             handleSave()
-
-        }
     }
 
     override fun onDateSet(v: DatePicker, year: Int, month: Int, dayOfMonth: Int) {
@@ -69,7 +71,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
     private fun loadDataFromActivity() {
         val bundle = intent.extras
         if (bundle != null) {
-             taskIdentification = bundle.getInt(TaskConstants.BUNDLE.TASKID)
+            taskIdentification = bundle.getInt(TaskConstants.BUNDLE.TASKID)
             viewModel.load(taskIdentification)
         }
     }
@@ -98,10 +100,10 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         Toast.makeText(applicationContext, str, Toast.LENGTH_SHORT).show()
     }
 
-    private fun getIndex(priorityId : Int) : Int{
+    private fun getIndex(priorityId: Int): Int {
         var index = 0
-        for(l in listPriority){
-            if(l.id == priorityId){
+        for (l in listPriority) {
+            if (l.id == priorityId) {
                 break
             }
             index++
@@ -111,28 +113,33 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
 
     @SuppressLint("SimpleDateFormat")
     private fun observe() {
-        viewModel.priorityList.observe(this) {
-            listPriority = it
-            val list = mutableListOf<String>()
-            for (p in it) {
-                list.add(p.description)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.priorityList.collect { value ->
+                    listPriority = value
+                    val list = mutableListOf<String>()
+                    for (p in value) {
+                        list.add(p.description)
+                    }
+                    val adapter = ArrayAdapter(
+                        applicationContext,
+                        android.R.layout.simple_spinner_dropdown_item,
+                        list
+                    )
+                    binding.spinnerPriority.adapter = adapter
+                }
             }
-            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, list)
-            binding.spinnerPriority.adapter = adapter
         }
 
         viewModel.taskSave.observe(this) {
             if (it.status()) {
-                if(taskIdentification == 0) {
-                    toast("Tarefa criada com sucesso.")
-                }
-                else{
-                    toast("Tarefa atualizada com sucesso.")
-                }
+                if (taskIdentification == 0)
+                    toast(getString(R.string.task_created))
+                else
+                    toast(getString(R.string.task_updated))
                 finish()
-            } else {
+            } else
                 toast(it.message())
-            }
         }
 
         viewModel.task.observe(this) {
@@ -150,5 +157,4 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
             }
         }
     }
-
 }
