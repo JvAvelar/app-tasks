@@ -2,7 +2,6 @@ package com.devmasterteam.tasks.service.repository.remote
 
 import com.devmasterteam.tasks.service.model.TaskModel
 import retrofit2.Call
-import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -51,7 +50,6 @@ interface TaskService {
     @PUT("Task/Undo")
     @FormUrlEncoded
     fun undo(@Field("Id") id: Int) : Call<Boolean>
-
 
     @HTTP(method = "DELETE", path = "Task", hasBody = true)
     @FormUrlEncoded
