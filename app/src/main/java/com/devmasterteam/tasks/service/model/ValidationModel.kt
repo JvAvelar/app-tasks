@@ -11,6 +11,7 @@ class ValidationModel(message: String = "") {
             status = false
         }
     }
+
     fun status() = status
     fun message() = validateMessage
 }
