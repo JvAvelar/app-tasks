@@ -39,12 +39,12 @@ class TaskViewHolder(private val itemBinding: RowTaskListBinding, val listener: 
 
         itemBinding.textDescription.setOnLongClickListener {
             AlertDialog.Builder(itemView.context)
-                .setTitle(R.string.remocao_de_tarefa)
-                .setMessage(R.string.remover_tarefa)
-                .setPositiveButton(R.string.sim) { dialog, which ->
+                .setTitle(R.string.remove_task)
+                .setMessage(R.string.text_remove_task)
+                .setPositiveButton(R.string.yes) { dialog, which ->
                     listener.onDeleteClick(task.id)
                 }
-                .setNeutralButton(R.string.cancelar, null)
+                .setNeutralButton(R.string.cancel, null)
                 .show()
             true
         }
