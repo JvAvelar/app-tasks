@@ -79,6 +79,8 @@ Vai levar para essa tela lateral, onde é possível escolher entre as opções.
   * SQLite
   * ROOM
   * Shared Preferences
+  * Flow
+  * Coroutines
   * Arquitetura MVVM
 
 #
