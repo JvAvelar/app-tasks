@@ -1,16 +1,18 @@
 package com.devmasterteam.tasks.view
 
 import android.content.Intent
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.devmasterteam.tasks.R
 import com.devmasterteam.tasks.databinding.ActivityLoginBinding
 import com.devmasterteam.tasks.viewmodel.LoginViewModel
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -36,16 +38,14 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         // Observadores
         observe()
         supportActionBar?.hide()
+
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onClick(v: View) {
-        if (v.id == R.id.button_login) {
+        if (v.id == R.id.button_login)
             handleLogin()
-        }
-        else if (v.id == R.id.text_register) {
-            startActivity(Intent(this, RegisterActivity::class.java ))
-        }
+        else if (v.id == R.id.text_register)
+            startActivity(Intent(this, RegisterActivity::class.java))
     }
 
     private fun observe() {
@@ -53,20 +53,22 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             if (it.status()) {
                 startActivity(Intent(applicationContext, MainActivity::class.java))
                 finish()
-            } else {
+            } else
                 Toast.makeText(this, it.message(), Toast.LENGTH_SHORT).show()
-            }
         }
 
-        viewModel.loggedUser.observe(this) {
-            if (it) {
-                startActivity(Intent(applicationContext, MainActivity::class.java))
-                finish()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.loggedUser.collect { value ->
+                    if (value) {
+                        startActivity(Intent(applicationContext, MainActivity::class.java))
+                        finish()
+                    }
+                }
             }
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun handleLogin() {
         val email = binding.editEmail.text.toString()
         val password = binding.editPassword.text.toString()
