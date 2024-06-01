@@ -39,11 +39,10 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun observe() {
         viewModel.user.observe(this) {
-            if (it.status()) {
+            if (it.status())
                 startActivity(Intent(this, MainActivity::class.java))
-            } else {
+            else
                 Toast.makeText(this, it.message(), Toast.LENGTH_SHORT).show()
-            }
         }
     }
 
