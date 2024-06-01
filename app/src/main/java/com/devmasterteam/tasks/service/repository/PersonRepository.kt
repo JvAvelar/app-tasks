@@ -13,7 +13,6 @@ class PersonRepository(context: Context) : BaseRepository(context) {
 
     private val remote = RetrofitClient.getService(PersonService::class.java)
 
-    @RequiresApi(Build.VERSION_CODES.M)
     fun login(email: String, password: String, listener: APIListener<PersonModel>) {
         if (!isConnectionAvaliable()) {
             listener.onFailure(context.getString(R.string.ERROR_INTERNET_CONNECTION))
@@ -22,7 +21,6 @@ class PersonRepository(context: Context) : BaseRepository(context) {
         executeCall(remote.login(email, password), listener)
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     fun create(name: String, email: String, password: String, listener: APIListener<PersonModel>) {
         if (!isConnectionAvaliable()) {
             listener.onFailure(context.getString(R.string.ERROR_INTERNET_CONNECTION))
