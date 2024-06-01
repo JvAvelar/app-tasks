@@ -1,8 +1,6 @@
 package com.devmasterteam.tasks.viewmodel
 
 import android.app.Application
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,6 +13,8 @@ import com.devmasterteam.tasks.service.repository.PersonRepository
 import com.devmasterteam.tasks.service.repository.PriorityRepository
 import com.devmasterteam.tasks.service.repository.SecurityPreferences
 import com.devmasterteam.tasks.service.repository.remote.RetrofitClient
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -25,14 +25,12 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     private val _login = MutableLiveData<ValidationModel>()
     val login: LiveData<ValidationModel> = _login
 
-    private val _loggedUser = MutableLiveData<Boolean>()
-    val loggedUser: LiveData<Boolean> = _loggedUser
-
+    private val _loggedUser = MutableStateFlow(true)
+    val loggedUser = _loggedUser.asStateFlow()
 
     /**
      * Faz login usando API
      */
-    @RequiresApi(Build.VERSION_CODES.M)
     fun doLogin(email: String, password: String) {
         personRepository.login(email, password, object : APIListener<PersonModel> {
             override fun onSuccess(result: PersonModel) {
@@ -67,7 +65,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 }
 
                 override fun onFailure(message: String) {
-                    val s = ""
+                    val s = message
                 }
             })
         }
