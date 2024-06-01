@@ -1,8 +1,6 @@
 package com.devmasterteam.tasks.viewmodel
 
 import android.app.Application
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -22,7 +20,6 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
     private val _user = MutableLiveData<ValidationModel>()
     val user: LiveData<ValidationModel> = _user
 
-    @RequiresApi(Build.VERSION_CODES.M)
     fun create(name: String, email: String, password: String) {
         personRepository.create(name, email, password, object : APIListener<PersonModel>{
             override fun onSuccess(result: PersonModel) {
@@ -40,5 +37,4 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
             }
         })
     }
-
 }
