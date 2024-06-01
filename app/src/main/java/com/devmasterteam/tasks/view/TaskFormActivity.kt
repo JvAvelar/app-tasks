@@ -37,7 +37,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         super.onCreate(savedInstanceState)
 
         // Variáveis da classe
-        viewModel = ViewModelProvider(this).get(TaskFormViewModel::class.java)
+        viewModel = ViewModelProvider(this)[TaskFormViewModel::class.java]
         binding = ActivityTaskFormBinding.inflate(layoutInflater)
 
         // Eventos
