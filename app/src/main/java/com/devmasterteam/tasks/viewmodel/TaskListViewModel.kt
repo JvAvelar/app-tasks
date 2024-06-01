@@ -1,8 +1,6 @@
 package com.devmasterteam.tasks.viewmodel
 
 import android.app.Application
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,16 +10,17 @@ import com.devmasterteam.tasks.service.model.TaskModel
 import com.devmasterteam.tasks.service.model.ValidationModel
 import com.devmasterteam.tasks.service.repository.PriorityRepository
 import com.devmasterteam.tasks.service.repository.TaskRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class TaskListViewModel(application: Application) : AndroidViewModel(application) {
 
     private val taskRepository = TaskRepository(application.applicationContext)
     private val priorityRepository = PriorityRepository(application.applicationContext)
+    private var taskFilter = TaskConstants.FILTER.ALL
 
-    private var taskFilter = 0
-
-    private val _tasks = MutableLiveData<List<TaskModel>>()
-    val tasks: LiveData<List<TaskModel>> = _tasks
+    private val _tasks = MutableStateFlow<List<TaskModel>>(emptyList())
+    val tasks = _tasks.asStateFlow()
 
     private val _delete = MutableLiveData<ValidationModel>()
     val delete: LiveData<ValidationModel> = _delete
@@ -29,8 +28,6 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
     private val _status = MutableLiveData<ValidationModel>()
     val status: LiveData<ValidationModel> = _status
 
-
-    @RequiresApi(Build.VERSION_CODES.M)
     fun list(filter: Int) {
         taskFilter = filter
         val listener = object : APIListener<List<TaskModel>> {
@@ -41,7 +38,9 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
                 _tasks.value = result
             }
 
-            override fun onFailure(message: String) {}
+            override fun onFailure(message: String) {
+                val s = message
+            }
         }
 
         when (filter) {
@@ -51,7 +50,6 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     fun delete(id: Int) {
         taskRepository.delete(id, object : APIListener<Boolean> {
             override fun onSuccess(result: Boolean) {
@@ -64,7 +62,6 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
         })
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     fun status(id: Int, complete: Boolean) {
         val listener = object : APIListener<Boolean> {
             override fun onSuccess(result: Boolean) {
