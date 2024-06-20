@@ -40,10 +40,11 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         viewModel = ViewModelProvider(this)[TaskFormViewModel::class.java]
         binding = ActivityTaskFormBinding.inflate(layoutInflater)
 
-        // Eventos
+        // Permissão de click dos botões
         binding.buttonSave.setOnClickListener(this)
         binding.buttonDate.setOnClickListener(this)
 
+        // Busca do banco de dados a lista de prioridades das tasks
         viewModel.loadPriorities()
 
         loadDataFromActivity()
@@ -54,6 +55,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         setContentView(binding.root)
     }
 
+    // Eventos de click dos botões
     override fun onClick(v: View) {
         if (v.id == R.id.button_date)
             handleDate()
@@ -61,6 +63,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
             handleSave()
     }
 
+    // Altera o conteúdo do botão para a data selecionada
     override fun onDateSet(v: DatePicker, year: Int, month: Int, dayOfMonth: Int) {
         val calendar = Calendar.getInstance()
         calendar.set(year, month, dayOfMonth)
@@ -68,6 +71,9 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         binding.buttonDate.text = dueDate
     }
 
+    /* Responsável por receber da AllTaskFragment o id que
+     * busca as tarefas filtradas da API
+     */
     private fun loadDataFromActivity() {
         val bundle = intent.extras
         if (bundle != null) {
@@ -76,6 +82,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         }
     }
 
+    // Responsável por abrir o DatePickDialog
     private fun handleDate() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -84,6 +91,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         DatePickerDialog(this, this, year, month, day).show()
     }
 
+    // Respónsável por salvar a task
     private fun handleSave() {
         val task = TaskModel().apply {
             this.id = taskIdentification
@@ -96,10 +104,14 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         viewModel.save(task)
     }
 
+    // Responsável por simplificar a criação de toasts
     private fun toast(str: String) {
         Toast.makeText(applicationContext, str, Toast.LENGTH_SHORT).show()
     }
 
+    /* Recebe o id da prioridade e retorna o index
+     * de acordo com a posição da lista de prioridades
+     */
     private fun getIndex(priorityId: Int): Int {
         var index = 0
         for (l in listPriority) {
@@ -111,8 +123,11 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         return index
     }
 
+    // Observadores da viewModel
     @SuppressLint("SimpleDateFormat")
     private fun observe() {
+
+        // Adiciona as descrições para a lista e passa para o adapter
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.priorityList.collect { value ->
@@ -131,6 +146,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
             }
         }
 
+        // Criação ou atualização de tasks
         viewModel.taskSave.observe(this) {
             if (it.status()) {
                 if (taskIdentification == 0)
@@ -142,6 +158,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
                 toast(it.message())
         }
 
+        // Recebe a task do load e adiciona seus valores nos respectivos campos
         viewModel.task.observe(this) {
             binding.editDescription.setText(it.description)
             binding.checkComplete.isChecked = it.complete
@@ -150,6 +167,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
             binding.buttonDate.text = SimpleDateFormat("dd/MM/yyyy").format(date)
         }
 
+        // Tratamento de erro do load
         viewModel.taskLoad.observe(this) {
             if (!it.status()) {
                 toast(it.message())
