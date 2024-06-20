@@ -34,10 +34,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Criando view model
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
+        // Adicionando as 3 barras de opção para a barra principal
         setSupportActionBar(binding.appBarMain.toolbar)
 
+        // Click do botão flutuante
         binding.appBarMain.fab.setOnClickListener {
             startActivity(Intent(applicationContext, TaskFormActivity::class.java))
         }
@@ -45,23 +48,27 @@ class MainActivity : AppCompatActivity() {
         // Navegação
         setupNavigation()
 
+        // Carrega o nome de usuario
         viewModel.loadUserName()
 
         // Observadores
         observe()
     }
 
+    // Responsável pela ação de click da barra de opções
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
+    // Responsável por gerenciar a navegação das fragments associadas à main
     private fun setupNavigation() {
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.nav_all_tasks, R.id.nav_next_tasks, R.id.nav_expired), drawerLayout
+            setOf(R.id.nav_all_tasks, R.id.nav_next_tasks, R.id.nav_expired),
+            drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
@@ -77,12 +84,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Faz logout do atual usuário
     private fun logout() {
         viewModel.logout()
         startActivity(Intent(applicationContext, LoginActivity::class.java))
         finish()
     }
 
+    // Observador responsável por alterar o nome de usuário
     private fun observe() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
