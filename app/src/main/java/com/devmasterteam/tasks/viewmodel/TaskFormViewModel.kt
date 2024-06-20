@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class TaskFormViewModel(application: Application) : AndroidViewModel(application) {
 
-    // Repositorios
+    // Instancias
     private val priorityRepository = PriorityRepository(application.applicationContext)
     private val taskRepository = TaskRepository(application.applicationContext)
 
