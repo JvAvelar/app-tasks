@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
-    // Observador responsável por alterar o nome de usuário
+    // Observadores da view model
     private fun observe() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
