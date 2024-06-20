@@ -15,9 +15,11 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class TaskFormViewModel(application: Application) : AndroidViewModel(application) {
 
+    // Repositorios
     private val priorityRepository = PriorityRepository(application.applicationContext)
     private val taskRepository = TaskRepository(application.applicationContext)
 
+    // Variaveis observaveis
     private val _priorityList = MutableStateFlow<List<PriorityModel>>(emptyList())
     val priorityList = _priorityList.asStateFlow()
 
@@ -34,6 +36,7 @@ class TaskFormViewModel(application: Application) : AndroidViewModel(application
         _priorityList.value = priorityRepository.list()
     }
 
+    // Salvar ou atualizar nova task
     fun save(task: TaskModel) {
         val listener = object : APIListener<Boolean> {
             override fun onSuccess(result: Boolean) {
@@ -51,6 +54,7 @@ class TaskFormViewModel(application: Application) : AndroidViewModel(application
             taskRepository.update(task, listener)
     }
 
+    // Busca da API uma task pelo Id
     fun load(id: Int) {
         taskRepository.load(id, object : APIListener<TaskModel> {
             override fun onSuccess(result: TaskModel) {
