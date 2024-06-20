@@ -33,14 +33,18 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         binding.buttonLogin.setOnClickListener(this)
         binding.textRegister.setOnClickListener(this)
 
+        // Verifica se o usuário ja foi logado anteriormente
         viewModel.verifyLoggedUser()
 
         // Observadores
         observe()
+
+        // Esconder a barra da tela
         supportActionBar?.hide()
 
     }
 
+    // Eventos de click dos butões
     override fun onClick(v: View) {
         if (v.id == R.id.button_login)
             handleLogin()
@@ -48,6 +52,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
     }
 
+    // Observadores da view model
     private fun observe() {
         viewModel.login.observe(this) {
             if (it.status()) {
@@ -69,6 +74,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    // Responsável por fazer o login na conta
     private fun handleLogin() {
         val email = binding.editEmail.text.toString()
         val password = binding.editPassword.text.toString()
