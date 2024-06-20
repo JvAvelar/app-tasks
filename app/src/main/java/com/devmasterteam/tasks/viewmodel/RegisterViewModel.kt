@@ -14,12 +14,15 @@ import com.devmasterteam.tasks.service.repository.remote.RetrofitClient
 
 class RegisterViewModel(application: Application) : AndroidViewModel(application) {
 
+    // Instancias
     private val personRepository = PersonRepository(application.applicationContext)
     private val securityPreferences = SecurityPreferences(application.applicationContext)
 
+    // Variavel a ser observada
     private val _user = MutableLiveData<ValidationModel>()
     val user: LiveData<ValidationModel> = _user
 
+    // Reponsavel por criar novos usuários
     fun create(name: String, email: String, password: String) {
         personRepository.create(name, email, password, object : APIListener<PersonModel>{
             override fun onSuccess(result: PersonModel) {
