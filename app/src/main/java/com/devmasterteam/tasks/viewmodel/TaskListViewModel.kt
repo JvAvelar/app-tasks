@@ -15,10 +15,12 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class TaskListViewModel(application: Application) : AndroidViewModel(application) {
 
+    // Instancias
     private val taskRepository = TaskRepository(application.applicationContext)
     private val priorityRepository = PriorityRepository(application.applicationContext)
     private var taskFilter = TaskConstants.FILTER.ALL
 
+    // Variaveis a serem observadas
     private val _tasks = MutableStateFlow<List<TaskModel>>(emptyList())
     val tasks = _tasks.asStateFlow()
 
@@ -28,6 +30,7 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
     private val _status = MutableLiveData<ValidationModel>()
     val status: LiveData<ValidationModel> = _status
 
+    // Responsavel pelo retorno das tasks filtradas
     fun list(filter: Int) {
         taskFilter = filter
         val listener = object : APIListener<List<TaskModel>> {
@@ -50,6 +53,7 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    // Deletar task
     fun delete(id: Int) {
         taskRepository.delete(id, object : APIListener<Boolean> {
             override fun onSuccess(result: Boolean) {
@@ -62,6 +66,7 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
         })
     }
 
+    // Responsavel pela lógica da task completa ou incompleta
     fun status(id: Int, complete: Boolean) {
         val listener = object : APIListener<Boolean> {
             override fun onSuccess(result: Boolean) {
