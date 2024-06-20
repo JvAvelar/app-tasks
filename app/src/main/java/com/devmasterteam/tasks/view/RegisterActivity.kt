@@ -22,7 +22,9 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
         viewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
         binding = ActivityRegisterBinding.inflate(layoutInflater)
 
+        // Esconder a barra da tela
         supportActionBar?.hide()
+
         // Eventos
         binding.buttonSave.setOnClickListener(this)
 
@@ -32,11 +34,13 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(binding.root)
     }
 
+    // Evento de click
     override fun onClick(v: View) {
         if (v.id == R.id.button_save)
             handleSave()
     }
 
+    // Observadores da view model
     private fun observe() {
         viewModel.user.observe(this) {
             if (it.status())
@@ -46,6 +50,7 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    // Responsável por criar contas de usuarios
     private fun handleSave() {
         val name = binding.editName.text.toString()
         val email = binding.editEmail.text.toString()
