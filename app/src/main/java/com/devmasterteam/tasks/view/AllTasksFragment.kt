@@ -46,19 +46,23 @@ class AllTasksFragment : Fragment() {
                 startActivity(intent)
             }
 
+            // Responsável por deletar tasks
             override fun onDeleteClick(id: Int) {
                 viewModel.delete(id)
             }
 
+            // Responsável por marcar como completa
             override fun onCompleteClick(id: Int) {
                 viewModel.status(id, true)
             }
 
+            // Responsável por marcar como incompleta
             override fun onUndoClick(id: Int) {
                 viewModel.status(id, false)
             }
         }
 
+        // Responsável por passar o listener para o adapter
         adapter.attachListener(listener)
 
         // Cria os observadores
@@ -77,6 +81,7 @@ class AllTasksFragment : Fragment() {
         viewModel.list(taskFilter)
     }
 
+    // Observadoers da view model
     private fun observe() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
